@@ -1,3 +1,292 @@
+:root {
+  --main-clr: #f8f8e3;
+  --main-clr-two: #f8f8e3ea;
+  --sec-clr: #e1e1c1;
+  --bg-clr: #0f0e0e;
+  --border-clr: rgba(128, 128, 128, 0.193);
+  --font-sec: #f8f8e361;
+  --border-two: #f8f8e3a2;
+  --bg-two: #1b1919;
+}
+@import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap");
+@font-face {
+  font-family: "gensans";
+  src: url("/GeneralSans-Variable.ttf");
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: var(--main-clr);
+  font-family: "Geist Mono", monospace;
+}
+
 body {
-  background-color: black;
+  background-color: var(--bg-clr);
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  padding-inline: 20px;
+  height: 60px;
+  border-bottom: 0.5px solid var(--border-clr);
+  align-items: center;
+
+  h1 {
+    font-size: 1.5rem;
+    font-family: "gensans";
+  }
+  /* From Uiverse.io by alexmaracinaru */
+  button {
+    cursor: pointer;
+    font-weight: 400;
+    transition: all 0.2s;
+    height: 60%;
+    padding-inline: 20px;
+    background: var(--main-clr);
+    border: 1px solid transparent;
+    display: flex;
+    align-items: center;
+    font-size: 0.7rem;
+    align-content: center;
+    span {
+      color: var(--bg-clr);
+    }
+  }
+
+  button:hover {
+    background: var(--sec-clr);
+  }
+
+  button > svg {
+    width: 19px;
+    margin-left: 6px;
+    color: var(--bg-clr);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  button:hover svg {
+    transform: translateX(5px);
+  }
+
+  button:active {
+    transform: scale(0.95);
+  }
+}
+nav {
+  height: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 20px;
+}
+ul {
+  height: 100%;
+  display: flex;
+  align-items: center;
+
+  li {
+    list-style: none;
+    height: 100%;
+    align-content: center;
+    &:last-child {
+      border-right: 1px solid var(--border-clr);
+    }
+  }
+  a {
+    text-decoration: none;
+    font-size: 0.8rem;
+    display: inline-block;
+    height: 100%;
+    align-content: center;
+    border-bottom: 1px solid transparent;
+    transition: 0.2s ease-in-out;
+    cursor: pointer;
+    border-left: 1px solid var(--border-clr);
+    padding-inline: 20px;
+    opacity: 0.8;
+    font-family: "gensans";
+
+    &:hover {
+      border-bottom: 1px solid var(--main-clr);
+    }
+  }
+}
+
+.overview {
+  padding-inline: 10px;
+  border-bottom: 1px solid var(--border-clr);
+  padding-bottom: 30px;
+  width: clamp(400px, 70%, 1000px);
+  margin-inline: auto;
+  margin-block: 20px;
+
+  h2 {
+    font-size: 1rem;
+    color: var(--font-sec);
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-size: 0.8rem;
+    color: var(--font-sec);
+    margin-bottom: 10px;
+  }
+  .info {
+    display: grid;
+    gap: 30px;
+    grid-template-columns: repeat(4, 1fr);
+    div {
+      background-color: var(--bg-two);
+      padding: 20px;
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      min-width: 0;
+      overflow-wrap: break-word;
+      word-break: break-all;
+
+      h3 {
+        color: var(--main-clr-two);
+        font-family: "Geist Mono", monospace;
+        opacity: 0.9;
+      }
+      p {
+        font-size: 1.5rem;
+        font-family: "gensans";
+        font-weight: 500;
+        word-wrap: break-word;
+        width: 100%;
+        overflow-y: auto;
+      }
+    }
+  }
+}
+.low {
+  background-color: rgba(255, 179, 0, 0.07) !important;
+}
+.low h3 {
+  color: rgba(248, 234, 103, 0.849) !important;
+}
+.low p {
+  color: rgba(241, 228, 116, 0.992) !important;
+}
+
+.out {
+  background-color: rgba(253, 31, 31, 0.123) !important;
+}
+.out h3 {
+  color: rgba(247, 67, 67, 0.849) !important;
+}
+.out p {
+  color: rgba(249, 109, 109, 0.992) !important;
+}
+.filters {
+  padding-inline: 10px;
+  border-bottom: 1px solid var(--border-clr);
+  padding-bottom: 30px;
+  width: clamp(400px, 70%, 1000px);
+  margin-inline: auto;
+  margin-block: 20px;
+  h2 {
+    font-size: 1rem;
+    color: var(--font-sec);
+    margin-bottom: 10px;
+  }
+}
+.inputs input,
+.inputs select {
+  background-color: transparent;
+  outline: none;
+  border: none;
+  background-color: var(--bg-two);
+  height: 40px;
+  padding-inline: 10px !important;
+  padding-right: 10px;
+  color: var(--main-clr-two);
+  font-size: 0.8rem;
+  width: 100%;
+}
+
+.p-form {
+  display: grid;
+  grid-template-columns: 2fr repeat(3, 1fr);
+  gap: 10px;
+  button {
+    height: 40px;
+    background-color: var(--main-clr);
+    color: var(--bg-clr);
+    grid-column-start: 3;
+    grid-column-end: 5;
+    cursor: pointer;
+    border: none;
+    &:hover {
+      background-color: var(--main-clr-two);
+    }
+  }
+}
+
+.select {
+  background-color: var(--bg-two);
+  padding-right: 10px;
+}
+.products {
+  padding-inline: 10px;
+  border-bottom: 1px solid var(--border-clr);
+  padding-bottom: 30px;
+  width: clamp(400px, 70%, 1000px);
+  margin-inline: auto;
+  margin-block: 20px;
+  h2 {
+    font-size: 1rem;
+    color: var(--font-sec);
+    margin-bottom: 10px;
+  }
+}
+
+.products table {
+  width: 100%;
+  font-size: 0.9rem;
+  margin-top: 20px;
+  border-collapse: collapse;
+  border: none;
+  color: var(--border-two);
+}
+
+.products thead {
+  opacity: 0.5;
+
+  height: 40px;
+}
+th {
+  font-weight: 300;
+  padding-right: 20px;
+}
+td,
+th {
+  text-align: start;
+}
+thead,
+tr {
+  border-bottom: 1px solid rgba(128, 128, 128, 0.322);
+  height: 40px;
+}
+.name {
+  font-family: "gensans";
+  font-weight: 500;
+}
+
+.diver {
+  opacity: 0.9;
+}
+.searchInput:focus {
+  outline: none;
+  border: 1px solid var(--main-clr);
+}
+
+@media (max-width: 930px) {
+  .info {
+    grid-template-columns: 1fr 1fr !important;
+  }
 }

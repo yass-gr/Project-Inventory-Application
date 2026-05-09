@@ -1,3 +1,22 @@
+<% 
+const inventoryValue = products.reduce((acc, curr)=>{
+  acc += curr.qty * curr.price
+  return acc
+},0 )
+
+
+const lowStockNumber = products.filter(p => p.qty <= 20).length
+
+const OutOfStockNumber = products.filter(p => p.qty === 0).length
+
+const availableTypes = new Set()
+products.forEach(p => availableTypes.add(p.type))
+
+const availableSuppliers = new Set()
+products.forEach(p => availableSuppliers.add(p.supplier))
+%>
+
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -8,5 +27,90 @@
   </head>
   <body>
     <main><%- include('header') %></main>
+
+    <section class="overview">
+      <h2>Overview</h1>
+      <div class="info">
+        <div>
+          <h3>Total <br> products</h2>
+          <p><%= products.length %></p>
+        </div>
+        <div>
+          <h3>Inventory <br> value</h2>
+          <p class=""><%= inventoryValue %>$</p>
+        </div>
+        <div class="low">
+          <h3>Low stock</h2>
+          <p><%= lowStockNumber %></p>
+        </div>
+        <div class="out">
+          <h3>Out of stock</h2>
+          <p><%= OutOfStockNumber %></p>
+        </div>
+      </div>
+    </section>
+    <section class="filters">
+      <h2>Filters</h2>
+      <div class="inputs">
+        <form class="p-form" action="/products"  method="GET">
+          <input class="searchInput" name="name" type="search" placeholder="Product name ...">
+          <div class="select">
+            <select name="type" id="">
+            <option value="">Type</option>
+            <% availableTypes.forEach(t=>{ %>
+              <option value="<%= t %>"><%= t %></option>
+            <% }) %>
+          </select>
+          </div>
+          <div class="select">
+            <select name="supplier" id="">
+            <option value="">Supplier</option>
+            <% availableSuppliers.forEach(s=>{ %>
+              <option value="<%= s %>"><%= s %></option>
+            <% }) %>
+          </select>
+          </div>
+         <div class="select">
+           <select name="availability" id="">
+            <option value="all">All</option>
+            <option value="on">On stock</option>
+            <option value="out">Out of stock</option>
+
+          </select>
+          
+         </div>
+         <button type="submit">Filter</button>
+        </form>
+      </div>
+    </section>
+    <section class="products">
+      <h2>Products</h2>
+      <table  border="0">
+        <thead>
+          <th>#</th>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Unit price</th>
+          <th>QTY</th>
+          <th>Supplier</th>
+        </thead>
+        <tbody>
+          <% filtred.map(p=> { %>
+            <tr>
+              <td><%= p.id %></td>
+               <td class="name"><%= p.name %></td>
+                <td class="diver"><%= p.type %></td>
+                 <td><%= p.price %></td>
+                  <td><%= p.qty %></td>
+                   <td class="diver"><%= p.supplier %></td>
+
+
+            </tr>
+
+
+          <% }) %>
+        </tbody>
+      </table>
+    </section>
   </body>
 </html>
