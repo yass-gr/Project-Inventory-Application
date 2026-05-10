@@ -1,8 +1,8 @@
-import db from "../db/db.js";
+import { getProducts as getProductsDb, getProductsFiltred } from "../db/products.js";
 
 export default async function getProducts(req, res) {
-  const result = await db.getProducts();
-  const resultFiltred = await db.getProductsFiltred(req.query);
+  const result = await getProductsDb();
+  const resultFiltred = await getProductsFiltred(req.query);
 
   res.render("products", {
     products: result.rows,
