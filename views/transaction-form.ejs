@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= mode === "add" ? "Add" : "Edit" %> Transaction</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main><%- include('header') %></main>
+    <section class="form-section">
+      <form class="product-form" action="/transactions<%= mode === "edit" ? "/" + transaction.id : "" %>" method="POST">
+        <% if (mode === "edit") { %>
+          <input type="hidden" name="_method" value="PUT">
+        <% } %>
+        <h2><%= mode === "add" ? "Add" : "Edit" %> Transaction</h2>
+        <select name="type" required>
+          <option value="">Type</option>
+          <option value="inflow" <%= mode === "edit" && transaction.type === "inflow" ? "selected" : "" %>>Inflow</option>
+          <option value="outflow" <%= mode === "edit" && transaction.type === "outflow" ? "selected" : "" %>>Outflow</option>
+        </select>
+        <input type="date" name="date" value="<%= mode === "edit" ? transaction.date : "" %>" required>
+        <input type="text" name="location" placeholder="Location" value="<%= mode === "edit" ? transaction.location : "" %>" required>
+        <input type="text" name="note" placeholder="Note" value="<%= mode === "edit" ? transaction.note : "" %>">
+        <select name="idproduct" required>
+          <option value="">Product</option>
+          <% products.forEach(p => { %>
+            <option value="<%= p.id %>" <%= mode === "edit" && Number(transaction.idproduct) === p.id ? "selected" : "" %>><%= p.name %></option>
+          <% }) %>
+        </select>
+        <input type="number" name="qty" placeholder="Quantity" value="<%= mode === "edit" ? transaction.qty : "" %>" required>
+        <button type="submit"><%= mode === "add" ? "Add" : "Update" %></button>
+      </form>
+    </section>
+  </body>
+</html>

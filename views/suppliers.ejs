@@ -51,32 +51,53 @@ const BestSupplier = suppliers.reduce((acc, curr)=>{
           </select>
           
          </div>
-         <button type="submit">Filter</button>
-        </form>
-      </div>
-    </section>
-    <section class="products">
-      <h2>Products</h2>
+           <button type="submit">Filter</button>
+           <% if (isAdmin) { %>
+             <label class="archive-toggle">
+               <input type="checkbox" name="showArchived" value="true" <%= query.showArchived === "true" ? "checked" : "" %>>
+               Show archived
+             </label>
+           <% } %>
+         </form>
+       </div>
+     </section>
+     <section class="products">
+       <div class="products-header">
+         <h2>Suppliers</h2>
+         <% if (isAdmin) { %>
+           <a class="add-btn" href="/suppliers/add">Add Supplier</a>
+         <% } %>
+       </div>
 <div class="table-container">
-        <table  border="0">
-        <thead>
-          <th>#</th>
-          <th>Name</th>
-          <th>Products number</th>
-          
-        </thead>
-        <tbody>
-          <% filtred.map(s=> { %>
-            <tr>
-              <td><%= s.id %></td>
-              <td class="name"><%= s.supplier %></td>
-              <td class="diver"><%= s.products_supplied %></td>
-             
-            </tr>
-          <% }) %>
-        </tbody>
-      </table>
+         <table  border="0">
+         <thead>
+           <th>#</th>
+           <th>Name</th>
+           <th>Products number</th>
+           <% if (isAdmin) { %>
+             <th></th>
+           <% } %>
+         </thead>
+         <tbody>
+           <% filtred.map(s=> { %>
+             <tr class="<%= s.archived ? "archived" : "" %>">
+               <td><%= s.id %></td>
+               <td class="name"><%= s.supplier %></td>
+               <td class="diver"><%= s.products_supplied %></td>
+               <% if (isAdmin) { %>
+                 <td class="actions">
+                   <a class="edit-btn" href="/suppliers/edit/<%= s.id %>">Edit</a>
+                   <form action="/suppliers/<%= s.id %>" method="POST">
+                     <input type="hidden" name="_method" value="DELETE">
+                     <button class="<%= s.archived ? "unarchive-btn" : "del-btn" %>" type="submit"><%= s.archived ? "Unarchive" : "Archive" %></button>
+                   </form>
+                 </td>
+               <% } %>
+             </tr>
+           <% }) %>
+         </tbody>
+       </table>
 </div>
-    </section>
+     </section>
   </body>
 </html>

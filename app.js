@@ -32,6 +32,7 @@ app.use((req, res, next) => {
 
 app.use((req, res, next) => {
   res.locals.isAdmin = global.isAdmin;
+  res.locals.currentPath = req.path;
   next();
 });
 

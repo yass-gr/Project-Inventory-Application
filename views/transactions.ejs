@@ -43,12 +43,23 @@ const outflow = transactions.filter(t => t.type === 'outflow' && new Date(t.date
            <label for="to">to</label>
           <input id="to"  name="to" type="date">
          </div>
-          <button class="date-filter" type="submit">Filter</button>
+           <button class="date-filter" type="submit">Filter</button>
+           <% if (isAdmin) { %>
+             <label class="archive-toggle">
+               <input type="checkbox" name="showArchived" value="true" <%= query.showArchived === "true" ? "checked" : "" %>>
+               Show archived
+             </label>
+           <% } %>
         </form>
       </div>
     </section>
     <section class="products">
-      <h2>Transactions</h2>
+      <div class="products-header">
+        <h2>Transactions</h2>
+        <% if (isAdmin) { %>
+          <a class="add-btn" href="/transactions/add">Add Transaction</a>
+        <% } %>
+      </div>
       <div class="table-container">
         <table border="0">
           <thead>
@@ -58,16 +69,28 @@ const outflow = transactions.filter(t => t.type === 'outflow' && new Date(t.date
             <th>Location</th>
             <th>Value</th>
             <th>Items</th>
+            <% if (isAdmin) { %>
+              <th></th>
+            <% } %>
           </thead>
           <tbody>
             <% filtred.forEach(t=> { %>
-              <tr>
+              <tr class="<%= t.archived ? "archived" : "" %>">
                 <td><%= t.id %></td>
                 <td><%= t.type %></td>
                 <td><%= t.date %></td>
                 <td><%= t.location %></td>
                 <td><%= t.value %></td>
                 <td><%= t.items %></td>
+                <% if (isAdmin) { %>
+                  <td class="actions">
+                    <a class="edit-btn" href="/transactions/edit/<%= t.id %>">Edit</a>
+                    <form action="/transactions/<%= t.id %>" method="POST">
+                      <input type="hidden" name="_method" value="DELETE">
+                      <button class="<%= t.archived ? "unarchive-btn" : "del-btn" %>" type="submit"><%= t.archived ? "Unarchive" : "Archive" %></button>
+                    </form>
+                  </td>
+                <% } %>
               </tr>
             <% }) %>
           </tbody>

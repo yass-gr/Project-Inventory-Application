@@ -6,5 +6,6 @@ export default async function getTransactions(req, res) {
   res.render("transactions", {
     transactions: result.rows,
     filtred: resultFiltred.rows,
+    query: req.query,
   });
 }

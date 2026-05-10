@@ -6,5 +6,6 @@ export default async function getProducts(req, res) {
   res.render("suppliers", {
     suppliers: result.rows,
     filtred: resultFiltred.rows,
+    query: req.query,
   });
 }

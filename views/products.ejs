@@ -70,16 +70,22 @@ products.forEach(p => availableSuppliers.add(p.supplier))
             <% }) %>
           </select>
           </div>
-         <div class="select3">
-           <select name="availability" id="">
-            <option value="all">All</option>
-            <option value="on">On stock</option>
-            <option value="out">Out of  stock</option>
+     <div class="select3">
+            <select name="availability" id="">
+             <option value="all">All</option>
+             <option value="on">On stock</option>
+             <option value="out">Out of  stock</option>
 
-          </select>
-          
-         </div>
-         <button type="submit">Filter</button>
+           </select>
+           
+          </div>
+          <button type="submit">Filter</button>
+          <% if (isAdmin) { %>
+            <label class="archive-toggle">
+              <input type="checkbox" name="showArchived" value="true" <%= query.showArchived === "true" ? "checked" : "" %>>
+              Show archived
+            </label>
+          <% } %>
         </form>
       </div>
     </section>
@@ -105,7 +111,7 @@ products.forEach(p => availableSuppliers.add(p.supplier))
         </thead>
         <tbody>
           <% filtred.map(p=> { %>
-            <tr>
+            <tr class="<%= p.archived ? "archived" : "" %>">
               <td><%= p.id %></td>
               <td class="name"><%= p.name %></td>
               <td class="diver"><%= p.type %></td>
@@ -117,7 +123,7 @@ products.forEach(p => availableSuppliers.add(p.supplier))
                   <a class="edit-btn" href="/products/edit/<%= p.id %>">Edit</a>
                   <form action="/products/<%= p.id %>" method="POST">
                     <input type="hidden" name="_method" value="DELETE">
-                    <button class="del-btn" type="submit">Del</button>
+                    <button class="<%= p.archived ? "unarchive-btn" : "del-btn" %>" type="submit"><%= p.archived ? "Unarchive" : "Archive" %></button>
                   </form>
                 </td>
               <% } %>

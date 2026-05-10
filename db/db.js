@@ -22,6 +22,10 @@ const getProductsFiltred = async (query) => {
     ? ` supplier.name = $${paramsCounter++} `
     : "";
 
+  const archivedQuery = query.showArchived !== "true"
+    ? " product.archived IS NOT TRUE "
+    : "";
+
   let queryString = `
     SELECT 
     product.name AS name, 
@@ -29,12 +33,15 @@ const getProductsFiltred = async (query) => {
     product.type AS type,
     product.qty AS qty,
     product.price AS price,
+    product.archived AS archived,
     supplier.name AS supplier
     FROM product JOIN supplier
     ON product.idsupplier = supplier.id
     `;
   let additions = "WHERE";
 
+  if (archivedQuery)
+    additions += ` ${archivedQuery}`;
   if (availabilityQuery)
     additions += `${additions === "WHERE" ? "" : "AND"} ${availabilityQuery}`;
   if (nameQuery)
@@ -70,29 +77,32 @@ const getSuppliersFiltred = async (query) => {
   }
 
   const nameQuery = query.name ? ` supplier.name ILIKE $1 ` : "";
+  const archivedQuery = query.showArchived !== "true" ? " supplier.archived IS NOT TRUE " : "";
 
   let queryString = `
     SELECT
     supplier.name AS supplier,
     supplier.id AS id,
+    supplier.archived AS archived,
     count(product.id) AS products_supplied
     FROM supplier LEFT JOIN product 
     ON supplier.id = product.idsupplier 
-    GROUP BY supplier.id, supplier.name
     `;
-  let additions = "HAVING";
 
-  if (availabilityQuery)
-    additions += `${additions === "HAVING" ? "" : "AND"} ${availabilityQuery}`;
-  if (nameQuery)
-    additions += `${additions === "HAVING" ? "" : "AND"} ${nameQuery}`;
-
-  if (additions !== "HAVING") {
-    additions += ";";
-    queryString += additions;
+  const whereParts = [archivedQuery, nameQuery].filter(c => c);
+  if (whereParts.length > 0) {
+    queryString += " WHERE " + whereParts.join(" AND ");
   }
-  let parameters = [];
 
+  queryString += " GROUP BY supplier.id, supplier.name";
+
+  if (availabilityQuery) {
+    queryString += " HAVING " + availabilityQuery;
+  }
+
+  queryString += ";";
+
+  let parameters = [];
   if (nameQuery) parameters.push(`%${query.name}%`);
 
   const data = await pool.query(queryString, parameters);
@@ -110,7 +120,7 @@ const getProducts = async () => {
     supplier.name AS supplier
     FROM product JOIN supplier
     ON product.idsupplier = supplier.id
-    ;`;
+    WHERE product.archived IS NOT TRUE;`;
   const data = await pool.query(queryString);
   return data;
 };
@@ -119,11 +129,12 @@ const getSuppliers = async () => {
     SELECT
     supplier.name AS supplier,
     supplier.id AS id,
+    supplier.archived AS archived,
     count(product.id) AS products_supplied
     FROM supplier LEFT JOIN product 
     ON supplier.id = product.idsupplier 
-    GROUP BY supplier.id, supplier.name;
-    ;`;
+    WHERE supplier.archived IS NOT TRUE
+    GROUP BY supplier.id, supplier.name;`;
   const data = await pool.query(queryString);
   return data;
 };
@@ -133,6 +144,10 @@ const getTransactionsFiltered = async (query) => {
   const fromQuery = query.from ? ` t.date >= $${paramsCounter++} ` : "";
   const toQuery = query.to ? ` t.date <= $${paramsCounter++} ` : "";
 
+  const archivedQuery = query.showArchived !== "true"
+    ? " t.archived IS NOT TRUE "
+    : "";
+
   let queryString = `
     SELECT
     t.id AS id,
@@ -140,6 +155,7 @@ const getTransactionsFiltered = async (query) => {
     t.date AS date,
     t.location AS location,
     t.note AS note,
+    t.archived AS archived,
     SUM(p.price * ti.qty) AS value,
     COUNT(ti.id) AS items
     FROM transaction t
@@ -149,9 +165,12 @@ const getTransactionsFiltered = async (query) => {
 
   let additions = "WHERE";
 
+  if (archivedQuery)
+    additions += ` ${archivedQuery}`;
   if (fromQuery)
     additions += `${additions === "WHERE" ? "" : " AND"} ${fromQuery}`;
-  if (toQuery) additions += `${additions === "WHERE" ? "" : " AND"} ${toQuery}`;
+  if (toQuery)
+    additions += `${additions === "WHERE" ? "" : " AND"} ${toQuery}`;
 
   if (additions !== "WHERE") {
     queryString += additions;
@@ -175,16 +194,70 @@ const getTransactions = async () => {
     t.date AS date,
     t.location AS location,
     t.note AS note,
+    t.archived AS archived,
     SUM(p.price * ti.qty) AS value,
     COUNT(ti.id) AS items
     FROM transaction t
     JOIN transaction_items ti ON ti.idtransaction = t.id
     JOIN product p ON p.id = ti.idproduct
+    WHERE t.archived IS NOT TRUE
     GROUP BY t.id, t.type, t.date, t.location, t.note;
     `;
   const data = await pool.query(queryString);
   return data;
 };
+
+const getTransaction = async (id) => {
+  const queryString = `
+    SELECT
+    t.id AS id,
+    t.type AS type,
+    t.date AS date,
+    t.location AS location,
+    t.note AS note,
+    t.archived AS archived,
+    ti.idproduct AS idproduct,
+    ti.qty AS qty,
+    p.name AS product_name
+    FROM transaction t
+    LEFT JOIN transaction_items ti ON ti.idtransaction = t.id
+    LEFT JOIN product p ON p.id = ti.idproduct
+    WHERE t.id = $1
+    LIMIT 1;`;
+  return await pool.query(queryString, [id]);
+};
+
+const createTransaction = async (data) => {
+  const { type, date, location, note, idproduct, qty } = data;
+  const result = await pool.query(
+    `INSERT INTO transaction (type, date, location, note) VALUES ($1, $2, $3, $4) RETURNING id;`,
+    [type, date, location, note]
+  );
+  const transactionId = result.rows[0].id;
+  await pool.query(
+    `INSERT INTO transaction_items (idtransaction, idproduct, qty) VALUES ($1, $2, $3);`,
+    [transactionId, idproduct, qty]
+  );
+};
+
+const updateTransaction = async (id, data) => {
+  const { type, date, location, note, idproduct, qty } = data;
+  await pool.query(
+    `UPDATE transaction SET type = $1, date = $2, location = $3, note = $4 WHERE id = $5;`,
+    [type, date, location, note, id]
+  );
+  await pool.query(`DELETE FROM transaction_items WHERE idtransaction = $1;`, [id]);
+  await pool.query(
+    `INSERT INTO transaction_items (idtransaction, idproduct, qty) VALUES ($1, $2, $3);`,
+    [id, idproduct, qty]
+  );
+};
+
+const deleteTransaction = async (id) => {
+  const queryString = `UPDATE transaction SET archived = NOT archived WHERE id = $1;`;
+  return await pool.query(queryString, [id]);
+};
+
 const getProduct = async (id) => {
   const queryString = `
     SELECT 
@@ -222,7 +295,35 @@ const updateProduct = async (id, data) => {
 };
 
 const deleteProduct = async (id) => {
-  const queryString = `DELETE FROM product WHERE id = $1;`;
+  const queryString = `UPDATE product SET archived = NOT archived WHERE id = $1;`;
+  return await pool.query(queryString, [id]);
+};
+
+const getSupplier = async (id) => {
+  const queryString = `
+    SELECT
+    supplier.name AS supplier,
+    supplier.id AS id,
+    supplier.archived AS archived
+    FROM supplier
+    WHERE supplier.id = $1;`;
+  return await pool.query(queryString, [id]);
+};
+
+const createSupplier = async (data) => {
+  const { name } = data;
+  const queryString = `INSERT INTO supplier (name) VALUES ($1);`;
+  return await pool.query(queryString, [name]);
+};
+
+const updateSupplier = async (id, data) => {
+  const { name } = data;
+  const queryString = `UPDATE supplier SET name = $1 WHERE id = $2;`;
+  return await pool.query(queryString, [name, id]);
+};
+
+const deleteSupplier = async (id) => {
+  const queryString = `UPDATE supplier SET archived = NOT archived WHERE id = $1;`;
   return await pool.query(queryString, [id]);
 };
 
@@ -237,4 +338,12 @@ export default {
   createProduct,
   updateProduct,
   deleteProduct,
+  getSupplier,
+  createSupplier,
+  updateSupplier,
+  deleteSupplier,
+  getTransaction,
+  createTransaction,
+  updateTransaction,
+  deleteTransaction,
 };
