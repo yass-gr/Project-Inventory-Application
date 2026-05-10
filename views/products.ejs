@@ -27,7 +27,7 @@ products.forEach(p => availableSuppliers.add(p.supplier))
   </head>
   <body>
     <main><%- include('header') %></main>
-
+    <h1 class="big-title">Products</h1>
     <section class="overview">
       <h2>Overview</h1>
       <div class="info">
@@ -44,7 +44,7 @@ products.forEach(p => availableSuppliers.add(p.supplier))
           <p><%= lowStockNumber %></p>
         </div>
         <div class="out">
-          <h3>Out of stock</h2>
+          <h3>Out of <br> stock</h2>
           <p><%= OutOfStockNumber %></p>
         </div>
       </div>
@@ -54,7 +54,7 @@ products.forEach(p => availableSuppliers.add(p.supplier))
       <div class="inputs">
         <form class="p-form" action="/products"  method="GET">
           <input class="searchInput" name="name" type="search" placeholder="Product name ...">
-          <div class="select">
+          <div class="select1">
             <select name="type" id="">
             <option value="">Type</option>
             <% availableTypes.forEach(t=>{ %>
@@ -62,7 +62,7 @@ products.forEach(p => availableSuppliers.add(p.supplier))
             <% }) %>
           </select>
           </div>
-          <div class="select">
+          <div class="select2">
             <select name="supplier" id="">
             <option value="">Supplier</option>
             <% availableSuppliers.forEach(s=>{ %>
@@ -70,11 +70,11 @@ products.forEach(p => availableSuppliers.add(p.supplier))
             <% }) %>
           </select>
           </div>
-         <div class="select">
+         <div class="select3">
            <select name="availability" id="">
             <option value="all">All</option>
             <option value="on">On stock</option>
-            <option value="out">Out of stock</option>
+            <option value="out">Out of  stock</option>
 
           </select>
           
@@ -85,7 +85,8 @@ products.forEach(p => availableSuppliers.add(p.supplier))
     </section>
     <section class="products">
       <h2>Products</h2>
-      <table  border="0">
+<div class="table-container">
+        <table  border="0">
         <thead>
           <th>#</th>
           <th>Name</th>
@@ -98,19 +99,16 @@ products.forEach(p => availableSuppliers.add(p.supplier))
           <% filtred.map(p=> { %>
             <tr>
               <td><%= p.id %></td>
-               <td class="name"><%= p.name %></td>
-                <td class="diver"><%= p.type %></td>
-                 <td><%= p.price %></td>
-                  <td><%= p.qty %></td>
-                   <td class="diver"><%= p.supplier %></td>
-
-
+              <td class="name"><%= p.name %></td>
+              <td class="diver"><%= p.type %></td>
+              <td><%= p.price %></td>
+              <td><%= p.qty %></td>
+              <td class="diver"><%= p.supplier %></td>
             </tr>
-
-
           <% }) %>
         </tbody>
       </table>
+</div>
     </section>
   </body>
 </html>

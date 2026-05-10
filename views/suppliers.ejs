@@ -1,0 +1,82 @@
+<% 
+let max = 0;
+const BestSupplier = suppliers.reduce((acc, curr)=>{
+    if (Number(curr.products_supplied) > max){
+        max = Number(curr.products_supplied)
+        acc = curr.supplier
+    }
+    return acc
+}, suppliers[0].supplier)
+%>
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main><%- include('header') %></main>
+    <h1 class="big-title">Suppliers</h1>
+    <section class="overview">
+      <h2>Overview</h1>
+      <div class="info">
+        <div class="ovr-1">
+          <h3>Total <br> suppliers</h2>
+          <p><%= suppliers.length %></p>
+        </div>
+        <div class="ovr-2">
+          <h3>Best <br> supplier</h2>
+          <p class=""><%= BestSupplier %></p>
+        </div>
+        
+      </div>
+    </section>
+    <section class="filters">
+      <h2>Filters</h2>
+      <div class="inputs">
+        <form class="p-form" action="/suppliers"  method="GET">
+          <input class="searchInput" name="name" type="search" placeholder="Supplier name ...">
+          
+          
+         <div class="select4">
+           <select name="availability" id="">
+            <option value="all">All</option>
+            <option value="on">Has products</option>
+            <option value="out">No products</option>
+
+          </select>
+          
+         </div>
+         <button type="submit">Filter</button>
+        </form>
+      </div>
+    </section>
+    <section class="products">
+      <h2>Products</h2>
+<div class="table-container">
+        <table  border="0">
+        <thead>
+          <th>#</th>
+          <th>Name</th>
+          <th>Products number</th>
+          
+        </thead>
+        <tbody>
+          <% filtred.map(s=> { %>
+            <tr>
+              <td><%= s.id %></td>
+              <td class="name"><%= s.supplier %></td>
+              <td class="diver"><%= s.products_supplied %></td>
+             
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+</div>
+    </section>
+  </body>
+</html>

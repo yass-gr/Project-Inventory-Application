@@ -2,6 +2,8 @@ import "dotenv/config";
 import express from "express";
 
 import productsRouter from "./routes/products.js";
+import suppliersRouter from "./routes/suppliers.js";
+import transactionsRouter from "./routes/transactions.js";
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -19,6 +21,8 @@ const assetsPath = path.join(__dirname, "public");
 app.use(express.static(assetsPath));
 
 app.use("/products", productsRouter);
+app.use("/suppliers", suppliersRouter);
+app.use("/transactions", transactionsRouter);
 
 app.listen(PORT, () => {
   console.log(`listening at ${PORT} ...`);

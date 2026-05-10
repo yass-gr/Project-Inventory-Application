@@ -1,0 +1,78 @@
+<% 
+const thirtyDaysAgo = new Date();
+thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+const inflow = transactions.filter(t => t.type === 'inflow' && new Date(t.date) >= thirtyDaysAgo).reduce((acc, t) => acc + Number(t.value), 0);
+const outflow = transactions.filter(t => t.type === 'outflow' && new Date(t.date) >= thirtyDaysAgo).reduce((acc, t) => acc + Number(t.value), 0);
+%>
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main><%- include('header') %></main>
+    <h1 class="big-title">Transactions</h1>
+    <section class="overview">
+      <h2>Overview</h1>
+      <div class="info">
+        <div class="ovr-1">
+          <h3>Inflow <br> last 30 days</h2>
+          <p><%= inflow %>$</p>
+        </div>
+        <div class="ovr-2">
+          <h3>Outflow <br> last 30 days</h2>
+          <p>- <%= outflow %>$</p>
+        </div>
+      </div>
+    </section>
+    <section class="filters">
+      <h2>Filters</h2>
+      <div class="inputs">
+        <form class="p-form" action="/transactions" method="GET">
+
+        <div class="date-1">
+            <label for="from">From</label>
+          <input id="from"  name="from" type="date">
+        </div>
+         <div class="date-2">
+           <label for="to">to</label>
+          <input id="to"  name="to" type="date">
+         </div>
+          <button class="date-filter" type="submit">Filter</button>
+        </form>
+      </div>
+    </section>
+    <section class="products">
+      <h2>Transactions</h2>
+      <div class="table-container">
+        <table border="0">
+          <thead>
+            <th>#</th>
+            <th>Type</th>
+            <th>Date</th>
+            <th>Location</th>
+            <th>Value</th>
+            <th>Items</th>
+          </thead>
+          <tbody>
+            <% filtred.forEach(t=> { %>
+              <tr>
+                <td><%= t.id %></td>
+                <td><%= t.type %></td>
+                <td><%= t.date %></td>
+                <td><%= t.location %></td>
+                <td><%= t.value %></td>
+                <td><%= t.items %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </body>
+</html>
