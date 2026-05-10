@@ -36,7 +36,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/products", productsRouter);
+app.use("/", productsRouter);
 app.use("/suppliers", suppliersRouter);
 app.use("/transactions", transactionsRouter);
 app.use("/admin", adminRouter);
