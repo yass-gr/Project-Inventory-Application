@@ -7,7 +7,7 @@ export function getAdmin(req, res) {
 export function postAdmin(req, res) {
   if (req.body.password === process.env.ADMIN_PASSWORD) {
     global.isAdmin = true;
-    res.redirect("/products");
+    res.redirect("/");
   } else {
     res.render("admin", { error: "Incorrect password" });
   }

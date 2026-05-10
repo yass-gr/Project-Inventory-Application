@@ -15,16 +15,16 @@ export async function showProductForm(req, res) {
 export async function createProduct(req, res) {
   const { name, type, price, qty, idsupplier } = req.body;
   await createProductDb({ name, type, qty: Number(qty), price: Number(price), idsupplier: Number(idsupplier) });
-  res.redirect("/products");
+  res.redirect("/");
 }
 
 export async function updateProduct(req, res) {
   const { name, type, price, qty, idsupplier } = req.body;
   await updateProductDb(req.params.id, { name, type, qty: Number(qty), price: Number(price), idsupplier: Number(idsupplier) });
-  res.redirect("/products");
+  res.redirect("/");
 }
 
 export async function deleteProduct(req, res) {
   await deleteProductDb(req.params.id);
-  res.redirect("/products");
+  res.redirect("/");
 }

@@ -1,8 +1,8 @@
 <% 
 const thirtyDaysAgo = new Date();
 thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-const inflow = transactions.filter(t => t.type === 'inflow' && new Date(t.date) >= thirtyDaysAgo).reduce((acc, t) => acc + Number(t.value), 0);
-const outflow = transactions.filter(t => t.type === 'outflow' && new Date(t.date) >= thirtyDaysAgo).reduce((acc, t) => acc + Number(t.value), 0);
+const inflow = Number(transactions.filter(t => t.type === 'inflow' && new Date(t.date) >= thirtyDaysAgo).reduce((acc, t) => acc + Number(t.value), 0).toFixed(2));
+const outflow = Number(transactions.filter(t => t.type === 'outflow' && new Date(t.date) >= thirtyDaysAgo).reduce((acc, t) => acc + Number(t.value), 0).toFixed(2));
 %>
 
 

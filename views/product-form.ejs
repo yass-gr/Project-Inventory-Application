@@ -9,7 +9,7 @@
   <body>
     <main><%- include('header') %></main>
     <section class="form-section">
-      <form class="product-form" action="/products<%= mode === "edit" ? "/" + product.id : "" %>" method="POST">
+      <form class="product-form" action="/<%= mode === "edit" ? "/" + product.id : "" %>" method="POST">
         <% if (mode === "edit") { %>
           <input type="hidden" name="_method" value="PUT">
         <% } %>
