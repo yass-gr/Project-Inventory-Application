@@ -44,6 +44,12 @@ const outflow = transactions.filter(t => t.type === 'outflow' && new Date(t.date
           <input id="to"  name="to" type="date">
            </div>
             <button class="date-filter" type="submit">Filter</button>
+            <% if (isAdmin) { %>
+              <select class="archive-select" name="showArchived">
+                <option value="">Active</option>
+                <option value="true" <%= query.showArchived === "true" ? "selected" : "" %>>Show archived</option>
+              </select>
+            <% } %>
          </form>
        </div>
      </section>
@@ -51,12 +57,8 @@ const outflow = transactions.filter(t => t.type === 'outflow' && new Date(t.date
        <div class="products-header">
          <h2>Transactions</h2>
          <div class="header-actions">
-            <% if (isAdmin) { %>
-              <select class="archive-select" name="showArchived">
-                <option value="">Active</option>
-                <option value="true" <%= query.showArchived === "true" ? "selected" : "" %>>Show archived</option>
-              </select>
-              <a class="add-btn" href="/transactions/add">Add Transaction</a>
+           <% if (isAdmin) { %>
+             <a class="add-btn" href="/transactions/add">Add Transaction</a>
            <% } %>
          </div>
       </div>

@@ -78,22 +78,24 @@ products.forEach(p => availableSuppliers.add(p.supplier))
 
            </select>
            
-           </div>
-           <button type="submit">Filter</button>
-         </form>
-       </div>
-     </section>
-     <section class="products">
-       <div class="products-header">
-         <h2>Products</h2>
-         <div class="header-actions">
+            </div>
+            <button type="submit">Filter</button>
             <% if (isAdmin) { %>
               <select class="archive-select" name="showArchived">
                 <option value="">Active</option>
                 <option value="true" <%= query.showArchived === "true" ? "selected" : "" %>>Show archived</option>
               </select>
-              <a class="add-btn" href="/products/add">Add Product</a>
-           <% } %>
+            <% } %>
+          </form>
+        </div>
+      </section>
+      <section class="products">
+        <div class="products-header">
+          <h2>Products</h2>
+          <div class="header-actions">
+             <% if (isAdmin) { %>
+               <a class="add-btn" href="/products/add">Add Product</a>
+            <% } %>
          </div>
       </div>
 <div class="table-container">

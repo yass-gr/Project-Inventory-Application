@@ -52,6 +52,12 @@ const BestSupplier = suppliers.reduce((acc, curr)=>{
           
           </div>
            <button type="submit">Filter</button>
+           <% if (isAdmin) { %>
+             <select class="archive-select" name="showArchived">
+               <option value="">Active</option>
+               <option value="true" <%= query.showArchived === "true" ? "selected" : "" %>>Show archived</option>
+             </select>
+           <% } %>
           </form>
         </div>
       </section>
@@ -59,12 +65,8 @@ const BestSupplier = suppliers.reduce((acc, curr)=>{
         <div class="products-header">
           <h2>Suppliers</h2>
           <div class="header-actions">
-             <% if (isAdmin) { %>
-               <select class="archive-select" name="showArchived">
-                 <option value="">Active</option>
-                 <option value="true" <%= query.showArchived === "true" ? "selected" : "" %>>Show archived</option>
-               </select>
-               <a class="add-btn" href="/suppliers/add">Add Supplier</a>
+            <% if (isAdmin) { %>
+              <a class="add-btn" href="/suppliers/add">Add Supplier</a>
             <% } %>
           </div>
        </div>
