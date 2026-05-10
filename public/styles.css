@@ -614,12 +614,21 @@ header a.admin-link:active {
   accent-color: var(--main-clr);
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .archive-toggle {
-  grid-column: 1 / -1;
-  justify-self: center;
+  display: flex;
+  align-items: center;
+  gap: 4px;
   font-size: 0.7rem;
-  margin-top: 5px;
+  color: var(--font-sec);
+  cursor: pointer;
   input {
     width: 15px;
+    accent-color: var(--main-clr);
   }
 }

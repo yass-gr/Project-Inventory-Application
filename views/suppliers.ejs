@@ -50,23 +50,23 @@ const BestSupplier = suppliers.reduce((acc, curr)=>{
 
           </select>
           
-         </div>
+          </div>
            <button type="submit">Filter</button>
-           <% if (isAdmin) { %>
-             <label class="archive-toggle">
-               <input type="checkbox" name="showArchived" value="true" <%= query.showArchived === "true" ? "checked" : "" %>>
-               Show archived
-             </label>
-           <% } %>
-         </form>
-       </div>
-     </section>
-     <section class="products">
-       <div class="products-header">
-         <h2>Suppliers</h2>
-         <% if (isAdmin) { %>
-           <a class="add-btn" href="/suppliers/add">Add Supplier</a>
-         <% } %>
+          </form>
+        </div>
+      </section>
+      <section class="products">
+        <div class="products-header">
+          <h2>Suppliers</h2>
+          <div class="header-actions">
+             <% if (isAdmin) { %>
+               <select class="archive-select" name="showArchived">
+                 <option value="">Active</option>
+                 <option value="true" <%= query.showArchived === "true" ? "selected" : "" %>>Show archived</option>
+               </select>
+               <a class="add-btn" href="/suppliers/add">Add Supplier</a>
+            <% } %>
+          </div>
        </div>
 <div class="table-container">
          <table  border="0">
