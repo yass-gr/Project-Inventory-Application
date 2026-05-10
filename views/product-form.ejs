@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= mode === "add" ? "Add" : "Edit" %> Product</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main><%- include('header') %></main>
+    <section class="form-section">
+      <form class="product-form" action="/products<%= mode === "edit" ? "/" + product.id : "" %>" method="POST">
+        <% if (mode === "edit") { %>
+          <input type="hidden" name="_method" value="PUT">
+        <% } %>
+        <h2><%= mode === "add" ? "Add" : "Edit" %> Product</h2>
+        <input type="text" name="name" placeholder="Name" value="<%= mode === "edit" ? product.name : "" %>" required>
+        <input type="text" name="type" placeholder="Type" value="<%= mode === "edit" ? product.type : "" %>" required>
+        <input type="number" step="0.01" name="price" placeholder="Unit price" value="<%= mode === "edit" ? product.price : "" %>" required>
+        <input type="number" name="qty" placeholder="Quantity" value="<%= mode === "edit" ? product.qty : "" %>" required>
+        <select name="idsupplier" required>
+          <option value="">Supplier</option>
+          <% suppliers.forEach(s => { %>
+            <option value="<%= s.id %>" <%= mode === "edit" && Number(product.idsupplier) === s.id ? "selected" : "" %>><%= s.supplier %></option>
+          <% }) %>
+        </select>
+        <button type="submit"><%= mode === "add" ? "Add" : "Update" %></button>
+      </form>
+    </section>
+  </body>
+</html>

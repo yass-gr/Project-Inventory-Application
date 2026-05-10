@@ -185,6 +185,47 @@ const getTransactions = async () => {
   const data = await pool.query(queryString);
   return data;
 };
+const getProduct = async (id) => {
+  const queryString = `
+    SELECT 
+    product.name AS name, 
+    product.id AS id,
+    product.type AS type,
+    product.qty AS qty,
+    product.price AS price,
+    product.idsupplier AS idsupplier,
+    supplier.name AS supplier
+    FROM product JOIN supplier
+    ON product.idsupplier = supplier.id
+    WHERE product.id = $1;
+  `;
+  return await pool.query(queryString, [id]);
+};
+
+const createProduct = async (data) => {
+  const { name, type, qty, price, idsupplier } = data;
+  const queryString = `
+    INSERT INTO product (name, type, qty, price, idsupplier)
+    VALUES ($1, $2, $3, $4, $5);
+  `;
+  return await pool.query(queryString, [name, type, qty, price, idsupplier]);
+};
+
+const updateProduct = async (id, data) => {
+  const { name, type, qty, price, idsupplier } = data;
+  const queryString = `
+    UPDATE product
+    SET name = $1, type = $2, qty = $3, price = $4, idsupplier = $5
+    WHERE id = $6;
+  `;
+  return await pool.query(queryString, [name, type, qty, price, idsupplier, id]);
+};
+
+const deleteProduct = async (id) => {
+  const queryString = `DELETE FROM product WHERE id = $1;`;
+  return await pool.query(queryString, [id]);
+};
+
 export default {
   getProducts,
   getProductsFiltred,
@@ -192,4 +233,8 @@ export default {
   getSuppliersFiltred,
   getTransactions,
   getTransactionsFiltered,
+  getProduct,
+  createProduct,
+  updateProduct,
+  deleteProduct,
 };

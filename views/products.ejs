@@ -84,7 +84,12 @@ products.forEach(p => availableSuppliers.add(p.supplier))
       </div>
     </section>
     <section class="products">
-      <h2>Products</h2>
+      <div class="products-header">
+        <h2>Products</h2>
+        <% if (isAdmin) { %>
+          <a class="add-btn" href="/products/add">Add Product</a>
+        <% } %>
+      </div>
 <div class="table-container">
         <table  border="0">
         <thead>
@@ -94,6 +99,9 @@ products.forEach(p => availableSuppliers.add(p.supplier))
           <th>Unit price</th>
           <th>QTY</th>
           <th>Supplier</th>
+          <% if (isAdmin) { %>
+            <th></th>
+          <% } %>
         </thead>
         <tbody>
           <% filtred.map(p=> { %>
@@ -104,6 +112,15 @@ products.forEach(p => availableSuppliers.add(p.supplier))
               <td><%= p.price %></td>
               <td><%= p.qty %></td>
               <td class="diver"><%= p.supplier %></td>
+              <% if (isAdmin) { %>
+                <td class="actions">
+                  <a class="edit-btn" href="/products/edit/<%= p.id %>">Edit</a>
+                  <form action="/products/<%= p.id %>" method="POST">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button class="del-btn" type="submit">Del</button>
+                  </form>
+                </td>
+              <% } %>
             </tr>
           <% }) %>
         </tbody>

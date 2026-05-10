@@ -54,7 +54,7 @@ header {
     font-size: 0.7rem;
     align-content: center;
     span {
-      color: var(--bg-clr);
+      color: var(--bg-clr) !important;
     }
   }
 
@@ -368,4 +368,208 @@ tr {
 
 .date-filter {
   align-self: self-end;
+}
+
+.login-section {
+  display: flex;
+  justify-content: center;
+
+  min-height: calc(100vh - 100px);
+}
+
+.login-form {
+  background: var(--bg-two);
+  margin-top: 150px;
+  aspect-ratio: 1;
+  height: 300px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: clamp(280px, 50%, 400px);
+}
+
+.login-form h2 {
+  font-size: 1.2rem;
+  font-family: "gensans";
+  text-align: center;
+  color: var(--font-sec);
+  margin-bottom: 50px;
+}
+
+.login-form input {
+  background: var(--bg-clr);
+  border: 1px solid transparent;
+  padding: 12px;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.login-form input:focus {
+  border-color: var(--main-clr);
+}
+
+.login-form button {
+  background: var(--main-clr);
+  color: var(--bg-clr);
+  border: none;
+  padding: 12px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.login-form button:hover {
+  background: var(--sec-clr);
+}
+
+.error-msg {
+  color: rgba(247, 67, 67, 0.849);
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+.form-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 100px);
+}
+
+.product-form {
+  background: var(--bg-two);
+
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: clamp(280px, 50%, 400px);
+}
+
+.product-form h2 {
+  font-size: 1.2rem;
+  font-family: "gensans";
+  text-align: center;
+  color: var(--font-sec);
+}
+
+.product-form input,
+.product-form select {
+  background: var(--bg-clr);
+  border: 1px solid transparent;
+  padding: 12px;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.product-form input:focus,
+.product-form select:focus {
+  border-color: var(--main-clr);
+}
+
+.product-form button {
+  background: var(--main-clr);
+  color: var(--bg-clr);
+  border: none;
+  padding: 12px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.product-form button:hover {
+  background: var(--sec-clr);
+}
+
+header a.admin-link {
+  cursor: pointer;
+  font-weight: 400;
+  transition: all 0.2s;
+  height: 60%;
+  padding-inline: 10px;
+  background: var(--main-clr);
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  font-size: 0.7rem;
+  text-decoration: none;
+  color: var(--bg-clr);
+}
+
+header a.admin-link span {
+  color: var(--bg-clr);
+}
+
+header a.admin-link:hover {
+  background: var(--sec-clr);
+}
+
+header a.admin-link > svg {
+  width: 19px;
+  margin-left: 6px;
+  transition: transform 0.3s ease-in-out;
+}
+
+header a.admin-link:hover svg {
+  transform: translateX(5px);
+}
+
+header a.admin-link:active {
+  transform: scale(0.95);
+}
+
+.products-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.add-btn {
+  background: var(--main-clr);
+  color: var(--bg-clr);
+  padding: 8px 16px;
+  font-size: 0.8rem;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.add-btn:hover {
+  background: var(--sec-clr);
+}
+
+.actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.edit-btn {
+  background: transparent;
+  border: 1px solid var(--border-clr);
+  color: var(--main-clr);
+  padding: 4px 10px;
+  font-size: 0.7rem;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.edit-btn:hover {
+  border-color: var(--main-clr);
+}
+
+.del-btn {
+  background: transparent;
+  border: 1px solid rgba(247, 67, 67, 0.5);
+  color: rgba(247, 67, 67, 0.849);
+  padding: 4px 10px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: 0.2s;
+  margin-block: 12px;
+}
+
+.del-btn:hover {
+  border-color: rgba(247, 67, 67, 0.849);
+  background: rgba(247, 67, 67, 0.1);
 }

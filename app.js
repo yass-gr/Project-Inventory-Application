@@ -4,6 +4,7 @@ import express from "express";
 import productsRouter from "./routes/products.js";
 import suppliersRouter from "./routes/suppliers.js";
 import transactionsRouter from "./routes/transactions.js";
+import adminRouter from "./routes/admin.js";
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -20,9 +21,24 @@ app.set("view engine", "ejs");
 const assetsPath = path.join(__dirname, "public");
 app.use(express.static(assetsPath));
 
+app.use(express.urlencoded({ extended: true }));
+
+app.use((req, res, next) => {
+  if (req.body && req.body._method) {
+    req.method = req.body._method.toUpperCase();
+  }
+  next();
+});
+
+app.use((req, res, next) => {
+  res.locals.isAdmin = global.isAdmin;
+  next();
+});
+
 app.use("/products", productsRouter);
 app.use("/suppliers", suppliersRouter);
 app.use("/transactions", transactionsRouter);
+app.use("/admin", adminRouter);
 
 app.listen(PORT, () => {
   console.log(`listening at ${PORT} ...`);
